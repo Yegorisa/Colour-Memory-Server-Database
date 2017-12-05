@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Colour Memory</string>
+    <string name="action_highscores">High Scores</string>
+    <string name="action_settings">Settings</string>
+    <string name="logo_description">Logo image</string>
+    <string name="congratulations">Congratulations!</string>
+    <string name="your_score_is">Your score is:</string>
+    <string name="enter_your_name">Enter your name</string>
+    <string name="ok">OK</string>
+    <string name="skip">SKIP</string>
+    <string name="rating">Rating</string>
+    <string name="rank">Rank</string>
+    <string name="name">Name</string>
+    <string name="score">Score</string>
+    <string name="rank_image_description">Rank image</string>
+    <string name="no_data">No data</string>
+    <string name="card_description">Card image</string>
+</resources>
