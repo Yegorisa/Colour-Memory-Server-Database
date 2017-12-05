@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/ColourMemory.iml" filepath="$PROJECT_DIR$/ColourMemory.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Colour-Memory-Server-Database.iml" filepath="$PROJECT_DIR$/Colour-Memory-Server-Database.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
