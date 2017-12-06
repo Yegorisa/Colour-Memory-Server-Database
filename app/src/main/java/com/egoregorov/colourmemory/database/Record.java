@@ -7,11 +7,9 @@ import java.util.UUID;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
-/**
- * Created by Egor on 05.12.2017.
- */
 
 public class Record extends RealmObject implements Comparable<Record> {
+
     @PrimaryKey
     private String mUserId;
 
@@ -50,16 +48,8 @@ public class Record extends RealmObject implements Comparable<Record> {
         return mScore;
     }
 
-    public void setScore(int score) {
-        mScore = score;
-    }
-
     public String getUserName() {
         return mUserName;
-    }
-
-    public void setUserName(String userName) {
-        mUserName = userName;
     }
 
     @Override

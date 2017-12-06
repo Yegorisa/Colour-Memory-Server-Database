@@ -6,10 +6,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Created by Egor on 04.12.2017.
- */
-
 public class Board {
     private List<Card> mCards;
     private int mCardsLeft;

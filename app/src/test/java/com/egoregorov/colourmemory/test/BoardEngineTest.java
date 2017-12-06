@@ -3,7 +3,7 @@ package com.egoregorov.colourmemory.test;
 import android.content.Context;
 
 import com.egoregorov.colourmemory.model.Card;
-import com.egoregorov.colourmemory.presenter.BoardPresenter;
+import com.egoregorov.colourmemory.presenter.BoardEngine;
 import com.egoregorov.colourmemory.view.IBoardView;
 
 import org.junit.After;
@@ -17,7 +17,7 @@ import static org.junit.Assert.assertNull;
 /**
  * Created by Egor on 06.12.2017.
  */
-public class BoardPresenterTest {
+public class BoardEngineTest {
 
     @Mock
     IBoardView boardView;
@@ -25,11 +25,11 @@ public class BoardPresenterTest {
     @Mock
     Context activity;
 
-    private BoardPresenter board;
+    private BoardEngine board;
 
     @Before
     public void init() {
-        board = new BoardPresenter(boardView, activity);
+        board = new BoardEngine(boardView, activity);
 
     }
 

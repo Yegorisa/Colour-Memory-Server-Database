@@ -12,10 +12,6 @@ import com.egoregorov.colourmemory.database.Record;
 
 import java.util.ArrayList;
 
-/**
- * Created by Egor on 05.12.2017.
- */
-
 public class TopTenRecordsAdapter extends RecyclerView.Adapter<TopTenRecordsAdapter.RecordViewHolder> {
 
     private ArrayList<Record> mRecordArrayList;
@@ -27,9 +23,7 @@ public class TopTenRecordsAdapter extends RecyclerView.Adapter<TopTenRecordsAdap
     @Override
     public RecordViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.record_layout, parent, false);
-
-        RecordViewHolder recordViewHolder = new RecordViewHolder(view);
-        return recordViewHolder;
+        return new RecordViewHolder(view);
     }
 
     @Override

@@ -20,9 +20,6 @@ import com.egoregorov.colourmemory.services.NetworkService;
 
 import java.util.ArrayList;
 
-/**
- * A placeholder fragment containing a simple view.
- */
 public class RecordsActivityFragment extends Fragment implements IGetResponse {
     private static final String SCREEN_LOADED = "SCREEN_LOADED";
     public static final String IS_DATA_OFFLINE = "IS_DATA_OFFLINE";
@@ -42,7 +39,6 @@ public class RecordsActivityFragment extends Fragment implements IGetResponse {
         View view = inflater.inflate(R.layout.fragment_records, container, false);
 
         mProgressBar = view.findViewById(R.id.fragment_records_loading);
-
         mRecyclerView = view.findViewById(R.id.fragment_records_topTenRecords);
 
         if (savedInstanceState != null) {
@@ -55,7 +51,6 @@ public class RecordsActivityFragment extends Fragment implements IGetResponse {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(layoutManager);
-
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(),
                 layoutManager.getOrientation());
         mRecyclerView.addItemDecoration(dividerItemDecoration);
@@ -64,8 +59,8 @@ public class RecordsActivityFragment extends Fragment implements IGetResponse {
             NetworkService networkService = new NetworkService();
             networkService.getAllRecords(this);
             mScreenLoaded = true;
-
         }
+
         return view;
     }
 
@@ -75,7 +70,7 @@ public class RecordsActivityFragment extends Fragment implements IGetResponse {
         if (savedInstanceState != null) {
             mIsDataOffline = savedInstanceState.getBoolean(IS_DATA_OFFLINE);
             if (mIsDataOffline) {
-                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(((AppCompatActivity) getActivity()).getSupportActionBar().getTitle() + " OFFLINE");
+                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(((AppCompatActivity) getActivity()).getSupportActionBar().getTitle() + getString(R.string.action_bar_offline));
             } else {
                 ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.action_highscores);
             }
@@ -92,7 +87,6 @@ public class RecordsActivityFragment extends Fragment implements IGetResponse {
     @Override
     public void gotTheResponse(ArrayList<Record> downloadedRecordsArrayList) {
         if (getActivity() != null) {
-
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -103,7 +97,7 @@ public class RecordsActivityFragment extends Fragment implements IGetResponse {
                             downloadedRecordsArrayList) {
                         record.setSavedOnServer(true);
                     }
-                    DatabaseMethods.saveArrayOfRecords(downloadedRecordsArrayList);
+                    DatabaseMethods.saveAllRecords(downloadedRecordsArrayList);
                     ArrayList<Record> newArrayOfRecords = DatabaseMethods.getAllRecords();
                     TopTenRecordsAdapter recordsAdapter = new TopTenRecordsAdapter(newArrayOfRecords);
                     mRecyclerView.setAdapter(recordsAdapter);

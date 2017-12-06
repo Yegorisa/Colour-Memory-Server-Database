@@ -16,17 +16,12 @@ import android.widget.TextView;
 
 import com.egoregorov.colourmemory.R;
 import com.egoregorov.colourmemory.model.Card;
-import com.egoregorov.colourmemory.presenter.BoardPresenter;
+import com.egoregorov.colourmemory.presenter.BoardEngine;
 
-/**
- * A placeholder fragment containing a simple view.
- */
 public class MainActivityFragment extends Fragment implements IBoardView {
-    private static final String TAG = "MainActivityFragment";
 
-    private View mView;
     private GridLayout mBoardLayout;
-    private BoardPresenter mBoardPresenter;
+    private BoardEngine mBoardEngine;
     private boolean mOneSelected = false;
     private TextView mScore;
     private boolean mBoardEnabled;
@@ -37,25 +32,24 @@ public class MainActivityFragment extends Fragment implements IBoardView {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d(TAG, "onCreateView: starts");
-        mBoardPresenter = new BoardPresenter(this,getActivity());
+        View view = inflater.inflate(R.layout.fragment_main, container, false);
+        mBoardLayout = view.findViewById(R.id.fragment_main_board);
         setHasOptionsMenu(true);
-        mBoardPresenter.checkIfAllRecordsAreUpToDate();
-        mView = inflater.inflate(R.layout.fragment_main, container, false);
-        mBoardLayout = mView.findViewById(R.id.fragment_main_board);
+
+        mBoardEngine = new BoardEngine(this, getActivity());
+        mBoardEngine.checkIfAllRecordsAreUpToDate();
+
         for (int i = 0; i < 16; i++) {
             mBoardLayout.getChildAt(i).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.d(TAG, "onClick: CLICK HAPPENS");
                     if (mBoardEnabled) {
                         view.setClickable(false);
                         int position = mBoardLayout.indexOfChild(view);
-                        Card card = mBoardPresenter.onCardSelected(position);
+                        Card card = mBoardEngine.onCardSelected(position);
                         if (card != null) {
                             final ImageView iv = (ImageView) view;
                             if (mOneSelected) {
-                                Log.d(TAG, "onClick: starts");
                                 mBoardEnabled = false;
                                 mOneSelected = false;
                             } else {
@@ -67,14 +61,14 @@ public class MainActivityFragment extends Fragment implements IBoardView {
                 }
             });
         }
-        return mView;
+        return view;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mScore = getActivity().findViewById(R.id.activity_main_score);
-        mBoardPresenter.onCreate();
+        mBoardEngine.onCreate();
     }
 
 
@@ -108,12 +102,10 @@ public class MainActivityFragment extends Fragment implements IBoardView {
     public void gotTheScore(int position1, int position2, int currentScore) {
         ImageView card = (ImageView) mBoardLayout.getChildAt(position1);
         if (card != null) {
-
             card.setVisibility(View.INVISIBLE);
             card.setClickable(false);
             card = (ImageView) mBoardLayout.getChildAt(position2);
             if (card != null) {
-
                 card.setVisibility(View.INVISIBLE);
                 card.setClickable(false);
                 mBoardEnabled = true;
@@ -137,7 +129,7 @@ public class MainActivityFragment extends Fragment implements IBoardView {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_restart) {
-            mBoardPresenter.onCreate();
+            mBoardEngine.onCreate();
             return true;
         }
         return false;
@@ -158,7 +150,6 @@ public class MainActivityFragment extends Fragment implements IBoardView {
 
             imageView.setRotationY(0f);
             imageView.animate().rotationY(-90f).setDuration(200).setListener(new Animator.AnimatorListener() {
-
                 @Override
                 public void onAnimationStart(Animator animation) {
                 }
@@ -172,7 +163,6 @@ public class MainActivityFragment extends Fragment implements IBoardView {
                     imageView.setImageResource(imageResourceId);
                     imageView.setRotationY(-270f);
                     imageView.animate().rotationY(-360f).setDuration(200).setListener(null);
-
                 }
 
                 @Override
@@ -186,7 +176,6 @@ public class MainActivityFragment extends Fragment implements IBoardView {
         if (imageView != null) {
             imageView.setRotationY(0f);
             imageView.animate().rotationY(90f).setDuration(200).setListener(new Animator.AnimatorListener() {
-
                 @Override
                 public void onAnimationStart(Animator animation) {
                 }
@@ -200,7 +189,6 @@ public class MainActivityFragment extends Fragment implements IBoardView {
                     imageView.setImageResource(R.drawable.card_bg);
                     imageView.setRotationY(270f);
                     imageView.animate().rotationY(360f).setDuration(200).setListener(null);
-
                 }
 
                 @Override
@@ -208,6 +196,5 @@ public class MainActivityFragment extends Fragment implements IBoardView {
                 }
             });
         }
-
     }
 }

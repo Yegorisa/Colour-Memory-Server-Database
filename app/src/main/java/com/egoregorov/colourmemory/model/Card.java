@@ -1,9 +1,5 @@
 package com.egoregorov.colourmemory.model;
 
-/**
- * Created by Egor on 04.12.2017.
- */
-
 public class Card {
     private int mImageResourceId;
     private boolean mSelected;

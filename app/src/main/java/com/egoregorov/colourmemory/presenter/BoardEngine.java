@@ -17,12 +17,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-/**
- * Created by Egor on 04.12.2017.
- */
-
-public class BoardPresenter implements IPresenter, IPostResponse {
-    private static final String TAG = "BoardPresenter";
+public class BoardEngine implements IPresenter, IPostResponse {
 
     private Board mModel;
     private IBoardView mBoardView;
@@ -35,10 +30,8 @@ public class BoardPresenter implements IPresenter, IPostResponse {
 
     private List<Record> mUnsavedRecords = new LinkedList<>();
 
-    public BoardPresenter(IBoardView boardView, Context context) {
+    public BoardEngine(IBoardView boardView, Context context) {
         mBoardView = boardView;
-        mModel = new Board().shuffle();
-        mScore = 0;
         mContext = context;
     }
 
@@ -80,13 +73,13 @@ public class BoardPresenter implements IPresenter, IPostResponse {
                 mCurrentCard = selectedCard;
 
                 if (selectedCard.getImageResourceId() == mPreviousCard.getImageResourceId()) {
-                    mDismissCardsTask = new DismissCardsTask();
-                    mDismissCardsTask.execute(true);
+                    mDismissCardsTask = new DismissCardsTask(true);
+                    mDismissCardsTask.execute();
                 } else {
                     mCurrentCard.setSelected(false);
                     mPreviousCard.setSelected(false);
-                    mDismissCardsTask = new DismissCardsTask();
-                    mDismissCardsTask.execute(false);
+                    mDismissCardsTask = new DismissCardsTask(false);
+                    mDismissCardsTask.execute();
 
                 }
             } else {
@@ -113,7 +106,7 @@ public class BoardPresenter implements IPresenter, IPostResponse {
 
     private void uploadUnsavedRecord() {
         NetworkService networkService = new NetworkService();
-        networkService.postRecord(BoardPresenter.this, mUnsavedRecords.get(0));
+        networkService.postRecord(BoardEngine.this, mUnsavedRecords.get(0));
     }
 
     private void gotTheScore() {
@@ -129,20 +122,24 @@ public class BoardPresenter implements IPresenter, IPostResponse {
 
     private void gameFinished() {
         mBoardView.gameCompleted(mScore);
-        BoardPresenter.this.onCreate();
+        BoardEngine.this.onCreate();
     }
 
-    class DismissCardsTask extends AsyncTask<Boolean, Void, Void> {
+    class DismissCardsTask extends AsyncTask<Void, Void, Void> {
         boolean mWasRight;
 
+        DismissCardsTask(boolean wasRight) {
+            mWasRight = wasRight;
+        }
+
+
         @Override
-        protected Void doInBackground(Boolean... booleans) {
+        protected Void doInBackground(Void... voids) {
             try {
                 TimeUnit.MILLISECONDS.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            mWasRight = booleans[0];
             return null;
         }
 

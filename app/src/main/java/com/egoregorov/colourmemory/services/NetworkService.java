@@ -1,7 +1,6 @@
 package com.egoregorov.colourmemory.services;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.egoregorov.colourmemory.database.Record;
 
@@ -23,12 +22,8 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-/**
- * Created by Egor on 06.12.2017.
- */
 
 public class NetworkService {
-    private static final String TAG = "NetworkService";
     private IGetResponse mIGetCallback;
     private IPostResponse mIPostCallback;
 
@@ -42,7 +37,6 @@ public class NetworkService {
         Request request = new Request.Builder()
                 .url("https://p-m-t.herokuapp.com/load-records")
                 .build();
-
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
@@ -55,7 +49,6 @@ public class NetworkService {
                 try (ResponseBody responseBody = response.body()) {
                     if (!response.isSuccessful())
                         throw new IOException("Unexpected code " + response);
-
                     ArrayList<Record> recordArrayList = transformJsonDataToArray(responseBody.string());
                     if (recordArrayList != null) {
                         mIGetCallback.gotTheResponse(recordArrayList);
@@ -64,7 +57,6 @@ public class NetworkService {
                     }
                 }
             }
-
         });
     }
 
@@ -80,7 +72,6 @@ public class NetworkService {
                 .build();
 
         JSONObject jsonRecord = transformRecordToJsonObject(record);
-
 
         if (jsonRecord != null) {
             String postBody = jsonRecord.toString();
@@ -125,9 +116,8 @@ public class NetworkService {
                 return null;
             }
         } catch (JSONException e) {
-            Log.e(TAG, "transformJsonDataToArray: ERROR PARSING JSON DATA " + e.getMessage());
+            return null;
         }
-        return null;
     }
 
     private JSONObject transformRecordToJsonObject(Record record) {
@@ -137,7 +127,6 @@ public class NetworkService {
             jsonObject.put("score", record.getScore());
             return jsonObject;
         } catch (JSONException e) {
-            Log.e(TAG, "transformRecordToJsonObject: JSONEXCEPTION " + e.getMessage());
             return null;
         }
     }

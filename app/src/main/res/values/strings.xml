@@ -16,4 +16,5 @@
     <string name="no_data">No data</string>
     <string name="card_description">Card image</string>
     <string name="restart">Restart</string>
+    <string name="action_bar_offline">OFFLINE</string>
 </resources>
