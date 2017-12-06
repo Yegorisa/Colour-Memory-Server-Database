@@ -20,7 +20,7 @@ import com.egoregorov.colourmemory.R;
 import com.egoregorov.colourmemory.database.DatabaseMethods;
 import com.egoregorov.colourmemory.database.Record;
 import com.egoregorov.colourmemory.services.IPostResponse;
-import com.egoregorov.colourmemory.services.NetworkRequests;
+import com.egoregorov.colourmemory.services.NetworkService;
 
 /**
  * Created by Egor on 05.12.2017.
@@ -57,16 +57,16 @@ public class CongratulationsDialogFragment extends DialogFragment implements IPo
             public void onClick(View view) {
                 Log.d(TAG, "onClick: starts");
                 if (!TextUtils.isEmpty(mEnterYourNameEditText.getText())){
-                    Record record = new Record(mEnterYourNameEditText.getText().toString(),Integer.parseInt(mFinalScoreTextView.getText().toString()));
-                    DatabaseMethods.saveRecord(record);
-
                     if (isOnline()){
                         mUserInputLayout.setVisibility(View.INVISIBLE);
                         mUserInputLayout.setClickable(false);
                         mProgressBar.setVisibility(View.VISIBLE);
-                        NetworkRequests networkRequests = new NetworkRequests();
-                        networkRequests.postRecord(CongratulationsDialogFragment.this,new Record(mEnterYourNameEditText.getText().toString(),Integer.valueOf(mFinalScoreTextView.getText().toString())));
+                        NetworkService networkService = new NetworkService();
+                        networkService.postRecord(CongratulationsDialogFragment.this,new Record(mEnterYourNameEditText.getText().toString(),Integer.valueOf(mFinalScoreTextView.getText().toString())));
                     } else {
+                        Record record = new Record(mEnterYourNameEditText.getText().toString(),Integer.parseInt(mFinalScoreTextView.getText().toString()));
+                        record.setSavedOnServer(false);
+                        DatabaseMethods.saveRecord(record);
                         Toast.makeText(getContext(), "Error saving data. No internet connection", Toast.LENGTH_SHORT).show();
                         dismiss();
                     }
@@ -90,10 +90,13 @@ public class CongratulationsDialogFragment extends DialogFragment implements IPo
     }
 
     @Override
-    public void succesfulPost() {
+    public void successfulPost() {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                Record record = new Record(mEnterYourNameEditText.getText().toString(),Integer.parseInt(mFinalScoreTextView.getText().toString()));
+                record.setSavedOnServer(true);
+                DatabaseMethods.saveRecord(record);
                 Toast.makeText(getContext(),"Succesfully saved",Toast.LENGTH_LONG).show();
                 dismiss();
             }
@@ -106,6 +109,9 @@ public class CongratulationsDialogFragment extends DialogFragment implements IPo
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                Record record = new Record(mEnterYourNameEditText.getText().toString(),Integer.parseInt(mFinalScoreTextView.getText().toString()));
+                record.setSavedOnServer(false);
+                DatabaseMethods.saveRecord(record);
                 Toast.makeText(getContext(),"Error saving data",Toast.LENGTH_LONG).show();
                 dismiss();
             }

@@ -27,8 +27,8 @@ import okhttp3.ResponseBody;
  * Created by Egor on 06.12.2017.
  */
 
-public class NetworkRequests {
-    private static final String TAG = "NetworkRequests";
+public class NetworkService {
+    private static final String TAG = "NetworkService";
     private IGetResponse mIGetCallback;
     private IPostResponse mIPostCallback;
 
@@ -37,7 +37,7 @@ public class NetworkRequests {
         final OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(5, TimeUnit.SECONDS)
                 .readTimeout(5, TimeUnit.SECONDS)
-                .writeTimeout(5,TimeUnit.SECONDS)
+                .writeTimeout(5, TimeUnit.SECONDS)
                 .build();
         Request request = new Request.Builder()
                 .url("https://p-m-t.herokuapp.com/load-records")
@@ -71,19 +71,19 @@ public class NetworkRequests {
     public void postRecord(IPostResponse iPostCallback, Record record) {
         mIPostCallback = iPostCallback;
         final MediaType MEDIA_TYPE_MARKDOWN
-                = MediaType.parse("text/x-markdown; charset=utf-8");
+                = MediaType.parse("application/json; charset=utf-8");
 
         final OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(2, TimeUnit.SECONDS)
                 .readTimeout(2, TimeUnit.SECONDS)
-                .writeTimeout(5,TimeUnit.SECONDS)
+                .writeTimeout(5, TimeUnit.SECONDS)
                 .build();
 
         JSONObject jsonRecord = transformRecordToJsonObject(record);
 
-        if (jsonRecord != null){
-            String postBody = jsonRecord.toString();
 
+        if (jsonRecord != null) {
+            String postBody = jsonRecord.toString();
             Request request = new Request.Builder()
                     .url("https://p-m-t.herokuapp.com/save-record")
                     .post(RequestBody.create(MEDIA_TYPE_MARKDOWN, postBody))
@@ -96,8 +96,7 @@ public class NetworkRequests {
 
                 @Override
                 public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                    Log.d(TAG, "onResponse: response is " + response.body().string());
-                    mIPostCallback.succesfulPost();
+                    mIPostCallback.successfulPost();
                 }
             });
         } else {
@@ -131,14 +130,14 @@ public class NetworkRequests {
         return null;
     }
 
-    private JSONObject transformRecordToJsonObject(Record record){
-        try{
+    private JSONObject transformRecordToJsonObject(Record record) {
+        try {
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("name",record.getUserName());
-            jsonObject.put("score",record.getScore());
+            jsonObject.put("name", record.getUserName());
+            jsonObject.put("score", record.getScore());
             return jsonObject;
-        }catch (JSONException e){
-            Log.e(TAG, "transformRecordToJsonObject: JSONEXCEPTION " + e.getMessage() );
+        } catch (JSONException e) {
+            Log.e(TAG, "transformRecordToJsonObject: JSONEXCEPTION " + e.getMessage());
             return null;
         }
     }

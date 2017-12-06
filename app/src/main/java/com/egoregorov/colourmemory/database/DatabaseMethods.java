@@ -31,9 +31,30 @@ public class DatabaseMethods {
 
     public static void saveArrayOfRecords(ArrayList<Record> recordArrayList){
         Realm myRealm = Realm.getDefaultInstance();
+        final RealmResults<Record> allRecords = myRealm.where(Record.class).findAll();
+        for (Record record :
+                allRecords) {
+            if (!record.isSavedOnServer()){
+                Record recordToSave = new Record(record.getUserId(),record.getUserName(),record.getScore());
+                recordToSave.setSavedOnServer(true);
+                recordArrayList.add(recordToSave);
+            }
+        }
         myRealm.beginTransaction();
         myRealm.deleteAll();
         myRealm.copyToRealm(recordArrayList);
         myRealm.commitTransaction();
+    }
+
+    public static void updateRecordToSavedOnServer(Record record){
+        Realm myRealm = Realm.getDefaultInstance();
+        final Record realmRecord = myRealm.where(Record.class).equalTo("mUserId",record.getUserId()).findFirst();
+        if (realmRecord != null){
+            myRealm.beginTransaction();
+            realmRecord.setSavedOnServer(true);
+            myRealm.copyToRealmOrUpdate(realmRecord);
+            myRealm.commitTransaction();
+        }
+
     }
 }

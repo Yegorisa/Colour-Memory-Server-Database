@@ -16,8 +16,8 @@ public class Record extends RealmObject implements Comparable<Record> {
     private String mUserId;
 
     private String mUserName;
-    private int mRank;
     private int mScore;
+    private boolean mSavedOnServer = false;
 
     public Record() {
     }
@@ -34,12 +34,16 @@ public class Record extends RealmObject implements Comparable<Record> {
         mScore = score;
     }
 
-    public int getRank() {
-        return mRank;
+    public String getUserId() {
+        return mUserId;
     }
 
-    public void setRank(int rank) {
-        mRank = rank;
+    public boolean isSavedOnServer() {
+        return mSavedOnServer;
+    }
+
+    public void setSavedOnServer(boolean savedOnServer) {
+        mSavedOnServer = savedOnServer;
     }
 
     public int getScore() {

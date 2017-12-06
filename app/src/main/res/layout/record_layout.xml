@@ -36,6 +36,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|center_horizontal"
         android:layout_weight="1"
+        android:paddingEnd="2dp"
+        android:paddingStart="2dp"
         android:text="@string/no_data"
         android:textAlignment="center"
         android:textSize="18sp"

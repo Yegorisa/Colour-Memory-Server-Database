@@ -8,4 +8,9 @@
         android:orderInCategory="100"
         android:title="@string/action_highscores"
         app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/action_restart"
+        android:icon="@drawable/ic_restart"
+        android:title="@string/restart"
+        app:showAsAction="ifRoom"/>
 </menu>

@@ -16,7 +16,7 @@ import com.egoregorov.colourmemory.R;
 import com.egoregorov.colourmemory.database.DatabaseMethods;
 import com.egoregorov.colourmemory.database.Record;
 import com.egoregorov.colourmemory.services.IGetResponse;
-import com.egoregorov.colourmemory.services.NetworkRequests;
+import com.egoregorov.colourmemory.services.NetworkService;
 
 import java.util.ArrayList;
 
@@ -61,8 +61,8 @@ public class RecordsActivityFragment extends Fragment implements IGetResponse {
         mRecyclerView.addItemDecoration(dividerItemDecoration);
 
         if (!mScreenLoaded) {
-            NetworkRequests networkRequests = new NetworkRequests();
-            networkRequests.getAllRecords(this);
+            NetworkService networkService = new NetworkService();
+            networkService.getAllRecords(this);
             mScreenLoaded = true;
 
         }
@@ -99,6 +99,10 @@ public class RecordsActivityFragment extends Fragment implements IGetResponse {
                     mProgressBar.setVisibility(View.GONE);
                     mIsDataOffline = false;
                     ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.action_highscores);
+                    for (Record record :
+                            downloadedRecordsArrayList) {
+                        record.setSavedOnServer(true);
+                    }
                     DatabaseMethods.saveArrayOfRecords(downloadedRecordsArrayList);
                     TopTenRecordsAdapter recordsAdapter = new TopTenRecordsAdapter(downloadedRecordsArrayList);
                     mRecyclerView.setAdapter(recordsAdapter);

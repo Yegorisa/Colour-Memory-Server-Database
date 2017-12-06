@@ -5,6 +5,6 @@ package com.egoregorov.colourmemory.services;
  */
 
 public interface IPostResponse {
-    void succesfulPost();
+    void successfulPost();
     void error();
 }
