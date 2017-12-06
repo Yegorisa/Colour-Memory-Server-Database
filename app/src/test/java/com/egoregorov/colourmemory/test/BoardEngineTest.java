@@ -41,7 +41,6 @@ public class BoardEngineTest {
     @Test
     public void selectCardCheckSelected() throws Exception {
         Card card = board.onCardSelected(0);
-//        assertEquals(new Card(R.drawable.colour1), card);
         assertTrue(card.isSelected());
     }
 

@@ -27,8 +27,6 @@ public class BoardTest {
         assertNotEquals(board.getCard(0).getImageResourceId(), board.getCard(1).getImageResourceId());
         assertNotEquals(board.getCard(2).getImageResourceId(), board.getCard(3).getImageResourceId());
         assertNotEquals(board.getCard(4).getImageResourceId(), board.getCard(5).getImageResourceId());
-//        assertEquals(new Card(R.drawable.colour3), board.getCard(5));
-//        assertEquals(new Card(R.drawable.colour8), board.getCard(14));
     }
 
     @Test
