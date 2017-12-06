@@ -47,13 +47,13 @@ public class NetworkService {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
-                    if (!response.isSuccessful())
-                        throw new IOException("Unexpected code " + response);
-                    ArrayList<Record> recordArrayList = transformJsonDataToArray(responseBody.string());
-                    if (recordArrayList != null) {
-                        mIGetCallback.gotTheResponse(recordArrayList);
-                    } else {
-                        mIGetCallback.error();
+                    if (response.isSuccessful()){
+                        ArrayList<Record> recordArrayList = transformJsonDataToArray(responseBody.string());
+                        if (recordArrayList != null) {
+                            mIGetCallback.gotTheResponse(recordArrayList);
+                        } else {
+                            mIGetCallback.error();
+                        }
                     }
                 }
             }
