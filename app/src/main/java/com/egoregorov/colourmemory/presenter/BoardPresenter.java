@@ -1,7 +1,8 @@
 package com.egoregorov.colourmemory.presenter;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.egoregorov.colourmemory.database.DatabaseMethods;
 import com.egoregorov.colourmemory.database.Record;
@@ -30,39 +31,44 @@ public class BoardPresenter implements IPresenter, IPostResponse {
     private Card mCurrentCard;
     private DismissCardsTask mDismissCardsTask;
 
+    private Context mContext;
+
     private List<Record> mUnsavedRecords = new LinkedList<>();
 
-    public BoardPresenter(IBoardView boardView) {
+    public BoardPresenter(IBoardView boardView, Context context) {
         mBoardView = boardView;
-        mModel = new Board();
+        mModel = new Board().shuffle();
         mScore = 0;
+        mContext = context;
     }
 
     @Override
     public void onCreate() {
-        mModel = new Board();
+        mModel = new Board().shuffle();
         mBoardView.startNewGame();
         mScore = 0;
         mPreviousCard = null;
         mCurrentCard = null;
-        if (mDismissCardsTask != null){
+        if (mDismissCardsTask != null) {
             mDismissCardsTask.cancel(true);
         }
     }
 
     @Override
     public void successfulPost() {
-        DatabaseMethods.updateRecordToSavedOnServer(mUnsavedRecords.get(0));
-        mUnsavedRecords.remove(0);
-        Log.d(TAG, "successfulPost: succesfully updated");
-        if (mUnsavedRecords.size() != 0) {
-            uploadUnsavedRecord();
-        }
+        ((Activity)mContext).runOnUiThread(new Runnable() {
+            public void run() {
+                DatabaseMethods.updateRecordToSavedOnServer(mUnsavedRecords.get(0));
+                mUnsavedRecords.remove(0);
+                if (mUnsavedRecords.size() != 0) {
+                    uploadUnsavedRecord();
+                }
+            }
+        });
     }
 
     @Override
     public void error() {
-
     }
 
     public Card onCardSelected(int position) {
@@ -92,21 +98,17 @@ public class BoardPresenter implements IPresenter, IPostResponse {
     }
 
     public void checkIfAllRecordsAreUpToDate() {
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                ArrayList<Record> recordArrayList = DatabaseMethods.getAllRecords();
-                for (int i = 0; i < 10; i++) {
-                    Record record = recordArrayList.get(i);
-                    if (!record.isSavedOnServer()) {
-                        mUnsavedRecords.add(record);
-                    }
-                }
-                if (mUnsavedRecords.size() != 0) {
-                    uploadUnsavedRecord();
-                }
+        ArrayList<Record> recordArrayList = DatabaseMethods.getAllRecords();
+        for (Record record :
+                recordArrayList) {
+            if (!record.isSavedOnServer()) {
+                mUnsavedRecords.add(record);
             }
-        });
+        }
+
+        if (mUnsavedRecords.size() != 0) {
+            uploadUnsavedRecord();
+        }
     }
 
     private void uploadUnsavedRecord() {
@@ -116,7 +118,7 @@ public class BoardPresenter implements IPresenter, IPostResponse {
 
     private void gotTheScore() {
         mScore = mScore + 2;
-        mModel.minusTwoCards();
+        mModel.removeTwoCards();
         mBoardView.gotTheScore(mModel.getCardPosition(mPreviousCard), mModel.getCardPosition(mCurrentCard), mScore);
     }
 
@@ -136,7 +138,7 @@ public class BoardPresenter implements IPresenter, IPostResponse {
         @Override
         protected Void doInBackground(Boolean... booleans) {
             try {
-                TimeUnit.MILLISECONDS.sleep(1250);
+                TimeUnit.MILLISECONDS.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -152,7 +154,7 @@ public class BoardPresenter implements IPresenter, IPostResponse {
             } else {
                 lostScore();
             }
-            if (mModel.getCardsLeft() == 0) {
+            if (mModel.cardsLeft() == 0) {
                 gameFinished();
             }
             mCurrentCard = null;

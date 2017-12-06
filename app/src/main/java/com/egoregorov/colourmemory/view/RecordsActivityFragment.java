@@ -104,7 +104,8 @@ public class RecordsActivityFragment extends Fragment implements IGetResponse {
                         record.setSavedOnServer(true);
                     }
                     DatabaseMethods.saveArrayOfRecords(downloadedRecordsArrayList);
-                    TopTenRecordsAdapter recordsAdapter = new TopTenRecordsAdapter(downloadedRecordsArrayList);
+                    ArrayList<Record> newArrayOfRecords = DatabaseMethods.getAllRecords();
+                    TopTenRecordsAdapter recordsAdapter = new TopTenRecordsAdapter(newArrayOfRecords);
                     mRecyclerView.setAdapter(recordsAdapter);
                 }
             });

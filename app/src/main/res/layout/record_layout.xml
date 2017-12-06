@@ -27,6 +27,7 @@
         android:adjustViewBounds="true"
         android:contentDescription="@string/rank_image_description"
         android:scaleType="fitCenter"
+        android:layout_gravity="center_vertical|center_horizontal"
         android:text="@string/no_data"
         app:srcCompat="@drawable/rank1"/>
 

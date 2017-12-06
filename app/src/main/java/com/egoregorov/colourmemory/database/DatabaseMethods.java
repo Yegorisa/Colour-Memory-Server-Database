@@ -19,6 +19,15 @@ public class DatabaseMethods {
         ArrayList<Record> recordsArrayList = new ArrayList<>();
         recordsArrayList.addAll(allRecords);
         Collections.sort(recordsArrayList);
+
+        if (recordsArrayList.size() > 10){
+            ArrayList<Record> sortedList = new ArrayList<>();
+            for (int i = 0; i < 10; i++) {
+                sortedList.add(recordsArrayList.get(i));
+            }
+            return sortedList;
+
+        }
         return recordsArrayList;
     }
 
@@ -29,14 +38,13 @@ public class DatabaseMethods {
         myRealm.commitTransaction();
     }
 
-    public static void saveArrayOfRecords(ArrayList<Record> recordArrayList){
+    public static void saveArrayOfRecords(ArrayList<Record> recordArrayList) {
         Realm myRealm = Realm.getDefaultInstance();
         final RealmResults<Record> allRecords = myRealm.where(Record.class).findAll();
         for (Record record :
                 allRecords) {
-            if (!record.isSavedOnServer()){
-                Record recordToSave = new Record(record.getUserId(),record.getUserName(),record.getScore());
-                recordToSave.setSavedOnServer(true);
+            if (!record.isSavedOnServer()) {
+                Record recordToSave = new Record(record.getUserId(), record.getUserName(), record.getScore());
                 recordArrayList.add(recordToSave);
             }
         }
@@ -46,10 +54,10 @@ public class DatabaseMethods {
         myRealm.commitTransaction();
     }
 
-    public static void updateRecordToSavedOnServer(Record record){
+    public static void updateRecordToSavedOnServer(Record record) {
         Realm myRealm = Realm.getDefaultInstance();
-        final Record realmRecord = myRealm.where(Record.class).equalTo("mUserId",record.getUserId()).findFirst();
-        if (realmRecord != null){
+        final Record realmRecord = myRealm.where(Record.class).equalTo("mUserId", record.getUserId()).findFirst();
+        if (realmRecord != null) {
             myRealm.beginTransaction();
             realmRecord.setSavedOnServer(true);
             myRealm.copyToRealmOrUpdate(realmRecord);
