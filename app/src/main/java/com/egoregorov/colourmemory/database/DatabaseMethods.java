@@ -28,4 +28,12 @@ public class DatabaseMethods {
         myRealm.copyToRealm(recordToSave);
         myRealm.commitTransaction();
     }
+
+    public static void saveArrayOfRecords(ArrayList<Record> recordArrayList){
+        Realm myRealm = Realm.getDefaultInstance();
+        myRealm.beginTransaction();
+        myRealm.deleteAll();
+        myRealm.copyToRealm(recordArrayList);
+        myRealm.commitTransaction();
+    }
 }

@@ -28,6 +28,12 @@ public class Record extends RealmObject implements Comparable<Record> {
         mUserId = UUID.randomUUID().toString();
     }
 
+    public Record(String userId, String userName, int score) {
+        mUserId = userId;
+        mUserName = userName;
+        mScore = score;
+    }
+
     public int getRank() {
         return mRank;
     }

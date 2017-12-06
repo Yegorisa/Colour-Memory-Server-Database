@@ -36,7 +36,7 @@ public class MainActivityFragment extends Fragment implements BoardView{
                              Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView: starts");
         mView = inflater.inflate(R.layout.fragment_main, container, false);
-        mBoardLayout = mView.findViewById(R.id.board);
+        mBoardLayout = mView.findViewById(R.id.fragment_main_board);
         for (int i = 0; i < 16; i++) {
             mBoardLayout.getChildAt(i).setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -62,7 +62,7 @@ public class MainActivityFragment extends Fragment implements BoardView{
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mScore = getActivity().findViewById(R.id.score);
+        mScore = getActivity().findViewById(R.id.activity_main_score);
 
         mBoardPresenter.onCreate();
     }
@@ -70,7 +70,6 @@ public class MainActivityFragment extends Fragment implements BoardView{
 
     @Override
     public void startNewGame() {
-        mBoardLayout = mView.findViewById(R.id.board);
         mScore.setText("0");
         resetAllCards();
     }
