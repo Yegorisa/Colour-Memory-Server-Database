@@ -70,7 +70,7 @@ public class RecordsActivityFragment extends Fragment implements IGetResponse {
         if (savedInstanceState != null) {
             mIsDataOffline = savedInstanceState.getBoolean(IS_DATA_OFFLINE);
             if (mIsDataOffline) {
-                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(((AppCompatActivity) getActivity()).getSupportActionBar().getTitle() + getString(R.string.action_bar_offline));
+                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(((AppCompatActivity) getActivity()).getSupportActionBar().getTitle() + " " + getString(R.string.action_bar_offline));
             } else {
                 ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.action_highscores);
             }
@@ -105,11 +105,11 @@ public class RecordsActivityFragment extends Fragment implements IGetResponse {
 
     @Override
     public void error() {
-        if (getActivity() != null){
+        if (getActivity() != null) {
             getActivity().runOnUiThread(() -> {
                 mIsDataOffline = true;
                 mProgressBar.setVisibility(View.GONE);
-                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(((AppCompatActivity) getActivity()).getSupportActionBar().getTitle() + " OFFLINE");
+                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(((AppCompatActivity) getActivity()).getSupportActionBar().getTitle() + " " + getString(R.string.action_bar_offline));
                 ArrayList<Record> records = DatabaseMethods.getAllRecords();
                 TopTenRecordsAdapter recordsAdapter = new TopTenRecordsAdapter(records);
                 mRecyclerView.setAdapter(recordsAdapter);

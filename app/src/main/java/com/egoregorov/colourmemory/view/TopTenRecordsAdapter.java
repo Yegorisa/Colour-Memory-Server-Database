@@ -81,6 +81,9 @@ public class TopTenRecordsAdapter extends RecyclerView.Adapter<TopTenRecordsAdap
             case 16:
                 holder.rank.setImageResource(R.drawable.rank16);
                 break;
+            default:
+                holder.rank.setImageResource(R.drawable.rank1);
+                break;
         }
     }
 
