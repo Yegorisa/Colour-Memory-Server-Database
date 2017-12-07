@@ -49,13 +49,11 @@ public class BoardEngine implements IPresenter, IPostResponse {
 
     @Override
     public void successfulPost() {
-        ((Activity)mContext).runOnUiThread(new Runnable() {
-            public void run() {
-                DatabaseMethods.updateRecordToSavedOnServer(mUnsavedRecords.get(0));
-                mUnsavedRecords.remove(0);
-                if (mUnsavedRecords.size() != 0) {
-                    uploadUnsavedRecord();
-                }
+        ((Activity)mContext).runOnUiThread(() -> {
+            DatabaseMethods.updateRecordToSavedOnServer(mUnsavedRecords.get(0));
+            mUnsavedRecords.remove(0);
+            if (mUnsavedRecords.size() != 0) {
+                uploadUnsavedRecord();
             }
         });
     }

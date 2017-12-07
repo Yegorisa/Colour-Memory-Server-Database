@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,23 +39,20 @@ public class MainActivityFragment extends Fragment implements IBoardView {
         mBoardEngine.checkIfAllRecordsAreUpToDate();
 
         for (int i = 0; i < 16; i++) {
-            mBoardLayout.getChildAt(i).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (mBoardEnabled) {
-                        view.setClickable(false);
-                        int position = mBoardLayout.indexOfChild(view);
-                        Card card = mBoardEngine.onCardSelected(position);
-                        if (card != null) {
-                            final ImageView iv = (ImageView) view;
-                            if (mOneSelected) {
-                                mBoardEnabled = false;
-                                mOneSelected = false;
-                            } else {
-                                mOneSelected = true;
-                            }
-                            startCardShowAnimation(iv, card.getImageResourceId());
+            mBoardLayout.getChildAt(i).setOnClickListener(view1 -> {
+                if (mBoardEnabled) {
+                    view1.setClickable(false);
+                    int position = mBoardLayout.indexOfChild(view1);
+                    Card card = mBoardEngine.onCardSelected(position);
+                    if (card != null) {
+                        final ImageView iv = (ImageView) view1;
+                        if (mOneSelected) {
+                            mBoardEnabled = false;
+                            mOneSelected = false;
+                        } else {
+                            mOneSelected = true;
                         }
+                        startCardShowAnimation(iv, card.getImageResourceId());
                     }
                 }
             });

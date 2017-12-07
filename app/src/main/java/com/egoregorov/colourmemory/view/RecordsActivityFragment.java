@@ -87,21 +87,18 @@ public class RecordsActivityFragment extends Fragment implements IGetResponse {
     @Override
     public void gotTheResponse(ArrayList<Record> downloadedRecordsArrayList) {
         if (getActivity() != null) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    mProgressBar.setVisibility(View.GONE);
-                    mIsDataOffline = false;
-                    ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.action_highscores);
-                    for (Record record :
-                            downloadedRecordsArrayList) {
-                        record.setSavedOnServer(true);
-                    }
-                    DatabaseMethods.saveAllRecords(downloadedRecordsArrayList);
-                    ArrayList<Record> newArrayOfRecords = DatabaseMethods.getAllRecords();
-                    TopTenRecordsAdapter recordsAdapter = new TopTenRecordsAdapter(newArrayOfRecords);
-                    mRecyclerView.setAdapter(recordsAdapter);
+            getActivity().runOnUiThread(() -> {
+                mProgressBar.setVisibility(View.GONE);
+                mIsDataOffline = false;
+                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.action_highscores);
+                for (Record record :
+                        downloadedRecordsArrayList) {
+                    record.setSavedOnServer(true);
                 }
+                DatabaseMethods.saveAllRecords(downloadedRecordsArrayList);
+                ArrayList<Record> newArrayOfRecords = DatabaseMethods.getAllRecords();
+                TopTenRecordsAdapter recordsAdapter = new TopTenRecordsAdapter(newArrayOfRecords);
+                mRecyclerView.setAdapter(recordsAdapter);
             });
         }
     }
@@ -109,16 +106,13 @@ public class RecordsActivityFragment extends Fragment implements IGetResponse {
     @Override
     public void error() {
         if (getActivity() != null){
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    mIsDataOffline = true;
-                    mProgressBar.setVisibility(View.GONE);
-                    ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(((AppCompatActivity) getActivity()).getSupportActionBar().getTitle() + " OFFLINE");
-                    ArrayList<Record> records = DatabaseMethods.getAllRecords();
-                    TopTenRecordsAdapter recordsAdapter = new TopTenRecordsAdapter(records);
-                    mRecyclerView.setAdapter(recordsAdapter);
-                }
+            getActivity().runOnUiThread(() -> {
+                mIsDataOffline = true;
+                mProgressBar.setVisibility(View.GONE);
+                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(((AppCompatActivity) getActivity()).getSupportActionBar().getTitle() + " OFFLINE");
+                ArrayList<Record> records = DatabaseMethods.getAllRecords();
+                TopTenRecordsAdapter recordsAdapter = new TopTenRecordsAdapter(records);
+                mRecyclerView.setAdapter(recordsAdapter);
             });
         }
 
