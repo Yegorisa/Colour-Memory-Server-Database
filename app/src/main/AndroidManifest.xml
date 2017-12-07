@@ -39,5 +39,4 @@
                 android:value="com.egoregorov.colourmemory.view.MainActivity"/>
         </activity>
     </application>
-
 </manifest>
