@@ -10,6 +10,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertNull;
@@ -29,8 +30,9 @@ public class BoardEngineTest {
 
     @Before
     public void init() {
+        MockitoAnnotations.initMocks(this);
         board = new BoardEngine(boardView, activity);
-
+        board.onCreate();
     }
 
     @After
